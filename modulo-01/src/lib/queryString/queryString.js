@@ -1,7 +1,7 @@
-const queryString = (obj) => {
-  const entries = Object.entries(obj);
-  const params = entries.map((param) => param.join('='));
-  return params.join('&');
-};
+const queryString = (obj) => (
+  Object.entries(obj)
+    .map((param) => param.join('='))
+    .join('&')
+);
 
 module.exports = { queryString };
