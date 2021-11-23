@@ -8,4 +8,14 @@ const keyValueToString = ([key, value]) => {
 
 const queryString = (obj) => Object.entries(obj).map(keyValueToString).join('&');
 
-module.exports = { queryString };
+const parse = (str) => Object.fromEntries(str.split('&').map((param) => {
+  const [key, value] = param.split('=');
+
+  if (value.includes(',')) {
+    return [key, value.split(',')];
+  }
+
+  return [key, value];
+}));
+
+module.exports = { queryString, parse };
