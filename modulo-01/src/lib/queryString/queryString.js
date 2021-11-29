@@ -18,4 +18,4 @@ const parse = (str) => Object.fromEntries(str.split('&').map((param) => {
   return [key, value];
 }));
 
-module.exports = { queryString, parse };
+export { queryString, parse };
