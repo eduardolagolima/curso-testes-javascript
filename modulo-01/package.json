@@ -6,7 +6,8 @@
   "scripts": {
     "lint": "eslint src/**/*.js",
     "test": "jest",
-    "test:watch": "jest --watchAll"
+    "test:watch": "jest --watchAll",
+    "test:coverage": "jest --coverage"
   },
   "keywords": [],
   "author": "",
