@@ -14,6 +14,10 @@ class Cart {
     this.items.push(item);
   }
 
+  remove(product) {
+    remove(this.items, { product });
+  }
+
   getTotal() {
     return this.items.reduce((acc, item) => (
       acc + (item.quantity * item.product.price)
