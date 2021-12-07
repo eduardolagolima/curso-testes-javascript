@@ -23,6 +23,27 @@ class Cart {
       acc + (item.quantity * item.product.price)
     ), 0);
   }
+
+  summary() {
+    const total = this.getTotal();
+    const { items } = this;
+
+    return {
+      total,
+      items,
+    };
+  }
+
+  checkout() {
+    const { total, items } = this.summary();
+
+    this.items = [];
+
+    return {
+      total,
+      items,
+    };
+  }
 }
 
 export { Cart };
