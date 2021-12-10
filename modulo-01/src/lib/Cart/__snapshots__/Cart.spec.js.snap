@@ -24,6 +24,7 @@ Object {
 
 exports[`Cart checkout() should return an object with the total and the list of itens when summary() is called 1`] = `
 Object {
+  "formattedTotal": "R$1,963.92",
   "items": Array [
     Object {
       "product": Object {

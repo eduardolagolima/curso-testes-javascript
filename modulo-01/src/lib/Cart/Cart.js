@@ -6,18 +6,18 @@ const Money = Dinero;
 Money.defaultCurrency = 'BRL';
 Money.defaultPrecision = 2;
 
-const calculatePercentageDiscount = (amount, item) => {
-  if (item.quantity > item.condition?.minimum) {
-    return amount.percentage(item.condition.percentage);
+const calculatePercentageDiscount = (amount, { quantity, condition }) => {
+  if (quantity > condition?.minimum) {
+    return amount.percentage(condition.percentage);
   }
 
   return Money({ amount: 0 });
 };
 
-const calculateQuantityDiscount = (amount, item) => {
-  const isEven = item.quantity % 2 === 0;
+const calculateQuantityDiscount = (amount, { quantity, condition }) => {
+  const isEven = quantity % 2 === 0;
 
-  if (item.quantity > item.condition?.quantity) {
+  if (quantity > condition?.quantity) {
     return amount.percentage(isEven ? 50 : 40);
   }
 
@@ -67,12 +67,12 @@ class Cart {
   }
 
   getTotal() {
-    return this.items.reduce((acc, item) => {
-      const amount = Money({ amount: item.quantity * item.product.price });
+    return this.items.reduce((acc, { quantity, product, condition }) => {
+      const amount = Money({ amount: quantity * product.price });
       let discount = Money({ amount: 0 });
 
-      if (item.condition) {
-        discount = calculateDiscount(amount, item.quantity, item.condition);
+      if (condition) {
+        discount = calculateDiscount(amount, quantity, condition);
       }
 
       return acc.add(amount).subtract(discount);
@@ -80,11 +80,13 @@ class Cart {
   }
 
   summary() {
-    const total = this.getTotal().getAmount();
+    const total = this.getTotal();
+    const formattedTotal = total.toFormat('$0,0.00');
     const { items } = this;
 
     return {
-      total,
+      total: total.getAmount(),
+      formattedTotal,
       items,
     };
   }
