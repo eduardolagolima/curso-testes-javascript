@@ -1,5 +1,5 @@
 <template>
-  <Tutorial/>
+  <h1>watch-store</h1>
 </template>
 
 <script>
