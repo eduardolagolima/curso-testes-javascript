@@ -7,8 +7,6 @@ import ProductCard from '@/components/ProductCard'
 import Search from '@/components/Search'
 import { makeServer } from '@/miragejs/server'
 
-const INITIAL_QUANTITY = 10
-
 jest.mock('axios', () => ({
   get: jest.fn(),
 }))
@@ -38,7 +36,7 @@ describe('ProductList - integration', () => {
   }
 
   const mountProductList = async (
-    quantity = INITIAL_QUANTITY,
+    quantity = 10,
     overrides = [],
     shouldReject = false
   ) => {
@@ -78,18 +76,15 @@ describe('ProductList - integration', () => {
   })
 
   it('should call axios.get on component mount', async () => {
-    const EXPECTED_CALLED_TIMES = 1
-    const EXPECTED_CALLED_ENDPOINT = '/api/products'
-
     // Arrange
     await mountProductList()
 
     // Assert
-    expect(axios.get).toHaveBeenCalledTimes(EXPECTED_CALLED_TIMES)
-    expect(axios.get).toHaveBeenCalledWith(EXPECTED_CALLED_ENDPOINT)
+    expect(axios.get).toHaveBeenCalledTimes(1)
+    expect(axios.get).toHaveBeenCalledWith('/api/products')
   })
 
-  it(`should mount the ProductCart ${INITIAL_QUANTITY} times`, async () => {
+  it(`should mount the ProductCart ten times`, async () => {
     // Arrange
     const { wrapper } = await mountProductList()
 
@@ -97,60 +92,73 @@ describe('ProductList - integration', () => {
     const cards = wrapper.findAllComponents(ProductCard)
 
     // Assert
-    expect(cards).toHaveLength(INITIAL_QUANTITY)
+    expect(cards).toHaveLength(10)
   })
 
   it('should display the error message when Promise rejects', async () => {
-    const EXPECTED_ERROR_MESSAGE = 'Problemas ao carregar a lista!'
-
     // Arrange
-    const { wrapper } = await mountProductList(INITIAL_QUANTITY, [], true)
+    const { wrapper } = await mountProductList(10, [], true)
 
     // Assert
-    expect(wrapper.text()).toContain(EXPECTED_ERROR_MESSAGE)
+    expect(wrapper.text()).toContain('Problemas ao carregar a lista!')
   })
 
   it('should filter the product list when a search is performed', async () => {
-    const EXPECTED_QUANTITY_AFTER_FILTER = 2
-    const FILLED_SEARCH_TERM = 'relógio'
-
     // Arrange
-    const { wrapper } = await mountProductList(INITIAL_QUANTITY, [
+    const { wrapper } = await mountProductList(10, [
       { title: 'Meu relógio amado' },
       { title: 'Meu outro relógio estimado' },
     ])
 
     // Act
     const search = wrapper.findComponent(Search)
-    search.find('input[type="search"]').setValue(FILLED_SEARCH_TERM)
+    search.find('input[type="search"]').setValue('relógio')
     await search.find('form').trigger('submit')
 
     // Assert
     const cards = wrapper.findAllComponents(ProductCard)
-    expect(wrapper.vm.searchTerm).toEqual(FILLED_SEARCH_TERM)
-    expect(cards).toHaveLength(EXPECTED_QUANTITY_AFTER_FILTER)
+    expect(wrapper.vm.searchTerm).toEqual('relógio')
+    expect(cards).toHaveLength(2)
   })
 
   it('should return all products when when a empty search is performed', async () => {
-    const EXPECTED_QUANTITY_AFTER_FILTER = 11
-    const FILLED_SEARCH_TERM = 'relógio'
-    const EMPTY_SEARCH_TERM = ''
-
     // Arrange
-    const { wrapper } = await mountProductList(INITIAL_QUANTITY, [
+    const { wrapper } = await mountProductList(10, [
       { title: 'Meu relógio amado' },
     ])
 
     // Act
     const search = wrapper.findComponent(Search)
-    search.find('input[type="search"]').setValue(FILLED_SEARCH_TERM)
+    search.find('input[type="search"]').setValue('relógio')
     await search.find('form').trigger('submit')
-    search.find('input[type="search"]').setValue(EMPTY_SEARCH_TERM)
+    search.find('input[type="search"]').setValue('')
     await search.find('form').trigger('submit')
 
     // Assert
     const cards = wrapper.findAllComponents(ProductCard)
-    expect(wrapper.vm.searchTerm).toEqual(EMPTY_SEARCH_TERM)
-    expect(cards).toHaveLength(EXPECTED_QUANTITY_AFTER_FILTER)
+    expect(wrapper.vm.searchTerm).toEqual('')
+    expect(cards).toHaveLength(11)
+  })
+
+  it('should display the total quantity of products', async () => {
+    // Arrange
+    const { wrapper } = await mountProductList(27)
+
+    // Act
+    const label = wrapper.find('[data-testid="total-quantity-label"]')
+
+    // Assert
+    expect(label.text()).toEqual('27 Products')
+  })
+
+  it('should display product (singular) when there is only 1 product', async () => {
+    // Arrange
+    const { wrapper } = await mountProductList(1)
+
+    // Act
+    const label = wrapper.find('[data-testid="total-quantity-label"]')
+
+    // Assert
+    expect(label.text()).toEqual('1 Product')
   })
 })
