@@ -22,7 +22,7 @@ describe('Cart - unit', () => {
 
   it('should emit close event when button gets clicked', async () => {
     const wrapper = mount(Cart)
-    const button = wrapper.find('[data-test-id="close-button"]')
+    const button = wrapper.find('[data-testid="close-button"]')
 
     await button.trigger('click')
 

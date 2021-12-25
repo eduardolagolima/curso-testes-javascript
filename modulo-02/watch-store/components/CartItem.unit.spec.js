@@ -46,15 +46,15 @@ describe('Cart - unit', () => {
 
   it('should display quantity 1 when product is first displayed', () => {
     const { wrapper } = mountCartItem(server)
-    const quantity = wrapper.find('[data-test-id="quantity"]')
+    const quantity = wrapper.find('[data-testid="quantity"]')
 
     expect(quantity.text()).toHaveLength(1)
   })
 
   it('should increase quantity when (+) button gets clicked', async () => {
     const { wrapper } = mountCartItem(server)
-    const quantity = wrapper.find('[data-test-id="quantity"]')
-    const button = wrapper.find('[data-test-id="+"]')
+    const quantity = wrapper.find('[data-testid="quantity"]')
+    const button = wrapper.find('[data-testid="+"]')
 
     await button.trigger('click')
     expect(quantity.text()).toContain('2')
@@ -66,8 +66,8 @@ describe('Cart - unit', () => {
 
   it('should decrease quantity when (-) button gets clicked', async () => {
     const { wrapper } = mountCartItem(server)
-    const quantity = wrapper.find('[data-test-id="quantity"]')
-    const button = wrapper.find('[data-test-id="-"]')
+    const quantity = wrapper.find('[data-testid="quantity"]')
+    const button = wrapper.find('[data-testid="-"]')
 
     await button.trigger('click')
     expect(quantity.text()).toContain('0')
@@ -75,8 +75,8 @@ describe('Cart - unit', () => {
 
   it('should not go below zero when (-) button is repeatedly clicked', async () => {
     const { wrapper } = mountCartItem(server)
-    const quantity = wrapper.find('[data-test-id="quantity"]')
-    const button = wrapper.find('[data-test-id="-"]')
+    const quantity = wrapper.find('[data-testid="quantity"]')
+    const button = wrapper.find('[data-testid="-"]')
 
     await button.trigger('click')
     await button.trigger('click')
