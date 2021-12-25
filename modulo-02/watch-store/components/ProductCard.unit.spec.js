@@ -3,28 +3,6 @@ import ProductCard from '@/components/ProductCard'
 import { makeServer } from '@/miragejs/server'
 import { CartManager } from '@/managers/CartManager'
 
-const mountProductCard = (server) => {
-  const product = server.create('product', {
-    title: 'Relógio bonito',
-    price: '22.00',
-    image:
-      'https://images.unsplash.com/photo-1495856458515-0637185db551?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80',
-  })
-
-  const cartManager = new CartManager()
-
-  const wrapper = mount(ProductCard, {
-    propsData: {
-      product,
-    },
-    mocks: {
-      $cart: cartManager,
-    },
-  })
-
-  return { wrapper, product, cartManager }
-}
-
 describe('ProductCard - unit', () => {
   let server
 
@@ -36,14 +14,36 @@ describe('ProductCard - unit', () => {
     server.shutdown()
   })
 
+  const mountProductCard = () => {
+    const product = server.create('product', {
+      title: 'Relógio bonito',
+      price: '22.00',
+      image:
+        'https://images.unsplash.com/photo-1495856458515-0637185db551?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80',
+    })
+
+    const cartManager = new CartManager()
+
+    const wrapper = mount(ProductCard, {
+      propsData: {
+        product,
+      },
+      mocks: {
+        $cart: cartManager,
+      },
+    })
+
+    return { wrapper, product, cartManager }
+  }
+
   it('should match snapshot', () => {
-    const { wrapper } = mountProductCard(server)
+    const { wrapper } = mountProductCard()
 
     expect(wrapper.element).toMatchSnapshot()
   })
 
   it('should mount the component', () => {
-    const { wrapper } = mountProductCard(server)
+    const { wrapper } = mountProductCard()
 
     expect(wrapper.vm).toBeDefined()
     expect(wrapper.text()).toContain('Relógio bonito')
@@ -51,7 +51,7 @@ describe('ProductCard - unit', () => {
   })
 
   it('should open the Cart and add item to CartManager on button click', async () => {
-    const { wrapper, cartManager, product } = mountProductCard(server)
+    const { wrapper, cartManager, product } = mountProductCard()
     const spy1 = jest.spyOn(cartManager, 'open')
     const spy2 = jest.spyOn(cartManager, 'addProduct')
 

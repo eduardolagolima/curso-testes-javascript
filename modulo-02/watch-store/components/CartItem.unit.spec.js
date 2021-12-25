@@ -3,26 +3,6 @@ import CartItem from '@/components/CartItem'
 import { makeServer } from '@/miragejs/server'
 import { CartManager } from '@/managers/CartManager'
 
-const mountCartItem = (server) => {
-  const cartManager = new CartManager()
-
-  const product = server.create('product', {
-    title: 'Lindo relógio',
-    price: '22.33',
-  })
-
-  const wrapper = mount(CartItem, {
-    propsData: {
-      product,
-    },
-    mocks: {
-      $cart: cartManager,
-    },
-  })
-
-  return { wrapper, product, cartManager }
-}
-
 describe('Cart - unit', () => {
   let server
 
@@ -34,8 +14,28 @@ describe('Cart - unit', () => {
     server.shutdown()
   })
 
+  const mountCartItem = () => {
+    const cartManager = new CartManager()
+
+    const product = server.create('product', {
+      title: 'Lindo relógio',
+      price: '22.33',
+    })
+
+    const wrapper = mount(CartItem, {
+      propsData: {
+        product,
+      },
+      mocks: {
+        $cart: cartManager,
+      },
+    })
+
+    return { wrapper, product, cartManager }
+  }
+
   it('should mount the component', () => {
-    const { wrapper } = mountCartItem(server)
+    const { wrapper } = mountCartItem()
 
     expect(wrapper.vm).toBeDefined()
   })
@@ -44,7 +44,7 @@ describe('Cart - unit', () => {
     const {
       wrapper,
       product: { title, price },
-    } = mountCartItem(server)
+    } = mountCartItem()
     const content = wrapper.text()
 
     expect(content).toContain(title)
@@ -52,14 +52,14 @@ describe('Cart - unit', () => {
   })
 
   it('should display quantity 1 when product is first displayed', () => {
-    const { wrapper } = mountCartItem(server)
+    const { wrapper } = mountCartItem()
     const quantity = wrapper.find('[data-testid="quantity"]')
 
     expect(quantity.text()).toHaveLength(1)
   })
 
   it('should increase quantity when (+) button gets clicked', async () => {
-    const { wrapper } = mountCartItem(server)
+    const { wrapper } = mountCartItem()
     const quantity = wrapper.find('[data-testid="quantity"]')
     const button = wrapper.find('[data-testid="+"]')
 
@@ -72,7 +72,7 @@ describe('Cart - unit', () => {
   })
 
   it('should decrease quantity when (-) button gets clicked', async () => {
-    const { wrapper } = mountCartItem(server)
+    const { wrapper } = mountCartItem()
     const quantity = wrapper.find('[data-testid="quantity"]')
     const button = wrapper.find('[data-testid="-"]')
 
@@ -81,7 +81,7 @@ describe('Cart - unit', () => {
   })
 
   it('should not go below zero when (-) button is repeatedly clicked', async () => {
-    const { wrapper } = mountCartItem(server)
+    const { wrapper } = mountCartItem()
     const quantity = wrapper.find('[data-testid="quantity"]')
     const button = wrapper.find('[data-testid="-"]')
 
@@ -91,14 +91,14 @@ describe('Cart - unit', () => {
   })
 
   it('should display a button to remove item from cart', () => {
-    const { wrapper } = mountCartItem(server)
+    const { wrapper } = mountCartItem()
     const button = wrapper.find('[data-testid="remove-button"]')
 
     expect(button.exists()).toBe(true)
   })
 
   it('should call cart manager removeProduct() when button gets clicked', async () => {
-    const { wrapper, cartManager, product } = mountCartItem(server)
+    const { wrapper, cartManager, product } = mountCartItem()
     const spy = jest.spyOn(cartManager, 'removeProduct')
     await wrapper.find('[data-testid="remove-button"]').trigger('click')
 
