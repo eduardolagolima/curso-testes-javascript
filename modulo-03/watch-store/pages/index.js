@@ -9,7 +9,6 @@ export default function Home() {
     if (products.length === 0 && !error) {
       return <h4 data-testid="no-products">No products</h4>;
     }
-
     return products.map((product) => <ProductCard product={product} key={product.id} />);
   };
 
@@ -17,13 +16,14 @@ export default function Home() {
     if (!error) {
       return null;
     }
-
     return <h4 data-testid="server-error">Server is down</h4>;
   };
 
+  const doSearch = () => {};
+
   return (
     <main data-testid="product-list" className="my-8">
-      <Search />
+      <Search doSearch={doSearch} />
       <div className="container mx-auto px-6">
         <h3 className="text-gray-700 text-2xl font-medium">Wrist Watch</h3>
         <span className="mt-3 text-sm text-gray-500">200+ Products</span>
