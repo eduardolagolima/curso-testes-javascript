@@ -4,6 +4,7 @@ module.exports = {
     '<rootDir>/components/**/*.js',
     '<rootDir>/pages/**/*.js',
     '<rootDir>/hooks/**/*.js',
+    '<rootDir>/store/**/*.js',
   ],
   moduleNameMapper: {
     // Handle CSS imports (with CSS modules)
