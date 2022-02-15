@@ -1,6 +1,6 @@
 import createError from 'http-errors';
 import { StatusCodes } from 'http-status-codes';
-import { logger } from '@/utils';
+import { logger } from '@/utils/logger';
 
 /**
  * Esta função encapsula a criação de erros para que

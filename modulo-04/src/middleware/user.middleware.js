@@ -27,7 +27,7 @@ export const get = async (req, res, next) => {
   }
 
   try {
-    const [user] = await findOrSave(req.headers.email);
+    const [ user ] = await findOrSave(req.headers.email);
     req.user = user;
     next();
   } catch (error) {

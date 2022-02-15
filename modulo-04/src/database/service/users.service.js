@@ -1,5 +1,5 @@
-import { appError } from '@/utils';
-import { logger } from '@/utils';
+import { appError, logger } from '@/utils';
+
 import { User } from '@/database/models/user.model';
 
 export async function listUsers() {
@@ -39,7 +39,7 @@ export async function saveUser(data) {
   if (!data) {
     return Promise.reject(appError('Failed to save user'));
   }
-  return await User.create({
+  return User.create({
     email: data.email,
   });
 }

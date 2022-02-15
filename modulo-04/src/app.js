@@ -21,7 +21,7 @@ attachRouters(app);
  * pois é a presença dos 4 que informa ao Express que este
  * é um local centralizado para o gerenciamento de erros.
  */
-app.use((error, req, res, next) => {
+app.use((error, req, res) => {
   res.status(error.status).json({ message: error.message });
 });
 

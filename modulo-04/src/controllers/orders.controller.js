@@ -41,10 +41,12 @@ export async function create(req, res, next) {
  * Este método é executado na rota como um middleware.
  * Ver orders.router.js.
  */
+// eslint-disable-next-line consistent-return
 export const validate = method => {
+  // eslint-disable-next-line default-case
   switch (method) {
-    case 'create': {
-      return [body('products', `Please provide a list of products`).exists()];
-    }
+  case 'create': {
+    return [ body('products', 'Please provide a list of products').exists() ];
+  }
   }
 };
