@@ -1,5 +1,4 @@
 import { appError, logger } from '@/utils';
-
 import { User } from '@/database/models/user.model';
 
 export async function listUsers() {
@@ -19,8 +18,9 @@ export async function listUsers() {
 
 export async function findOrSave(email) {
   try {
+    const user = await User.findOrCreate({ where: { email } });
     logger.info(`User located or created with email: ${email}`);
-    return await User.findOrCreate({ where: { email } });
+    return user;
   } catch (error) {
     /**
      * Ao rejeitar a Promise com um erro, este será
