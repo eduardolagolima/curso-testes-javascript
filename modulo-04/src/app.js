@@ -22,7 +22,8 @@ attachRouters(app);
  * pois é a presença dos 4 que informa ao Express que este
  * é um local centralizado para o gerenciamento de erros.
  */
-app.use((error, req, res) => {
+// eslint-disable-next-line no-unused-vars
+app.use((error, req, res, next) => {
   appLogger.error(error.stack);
   res.status(error.status).json({ message: error.message });
 });
