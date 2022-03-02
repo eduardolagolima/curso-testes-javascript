@@ -6,8 +6,10 @@
  */
 import * as homeController from './home.controller';
 import * as ordersController from './orders.controller';
+import * as productsController from './products.controller';
 
 export {
   homeController,
-  ordersController
+  ordersController,
+  productsController
 };
